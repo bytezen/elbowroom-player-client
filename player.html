@@ -63,21 +63,26 @@
 <!--   </div> -->
 
 <script type="text/javascript">
-  let SB_SERVER = "127.0.0.1"
+  let SB_SERVER = "127.0.0.1" //TODO: pass via queryParam
       ,SB_PORT = 9000
-      ,SB_NAME = "Player 0"
+      ,SB_NAME = "Player 0"   //TODO: pass via queryParam
+      ,SB_ID = "player0"      //TODO: pass via queryParam
+      ,SB_CHANNEL_TYPE = "string"
       ,SB_DESCR = SB_NAME + " player client"
 
   let spacebrew = new Spacebrew()
   
-  spacebrew.addPublish("player0","string","")
+  spacebrew.addPublish(SB_ID,SB_CHANNEL_TYPE,"")
   //spacebrew.addSubscribe("player0_moves","string","")
   //spacebrew.onStringMessage( onStringMessage )
   spacebrew.connect(SB_SERVER, SB_PORT, SB_NAME, SB_DESCR);
 </script>
 
 <script type="text/javascript">
-  
+    const LEFT   = 'left'
+         ,RIGHT  = 'right'
+         ,UP     = 'up'
+         ,DOWN   = 'down'
 
     function setup() {
       noCanvas();
@@ -107,24 +112,39 @@
             });
     }
 
+    let sendToServer = (channel,type,value) =>
+      {
+        console.log('[sendToServer]',channel,type,value);
+        spacebrew.send(channel,type,value);
+      }
+
+    let move = sendToServer.bind(null,SB_ID,SB_CHANNEL_TYPE);
+
     let onDirectionButtonClick = 
           (direction) => {
             console.log('[onDirectionButtonClick]',direction)
+          if( direction === LEFT  || 
+              direction === UP    ||   
+              direction === RIGHT || 
+              direction === DOWN ) {
+            move(direction);
+          }                                  
         }
 
     function keyPressed(value) {
       // console.log(keyCode);
-      if(keyCode === 37) { moveLeft() }
-      if(keyCode === 38) { moveUp() }
-      if(keyCode === 39) { moveRight() }
-      if(keyCode === 40) { moveDown() }
+
+      if(keyCode === 37) { move(LEFT) }
+      if(keyCode === 38) { move(UP) }
+      if(keyCode === 39) { move(RIGHT) }
+      if(keyCode === 40) { move(DOWN) }
     }
 
     function keyTyped() {
-      if(key === 'w' || key === 'W') { moveUp() }
-      if(key === 'a' || key === 'A') { moveLeft() }
-      if(key === 's' || key === 'S') { moveDown() }        
-      if(key === 'd' || key === 'D') { moveRight() }
+      if(key === 'w' || key === 'W') { move(UP) }
+      if(key === 'a' || key === 'A') { move(LEFT) }
+      if(key === 's' || key === 'S') { move(DOWN) }        
+      if(key === 'd' || key === 'D') { move(RIGHT) }
     }
 
 
