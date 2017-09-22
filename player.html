@@ -2,6 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript" src="js/lodash.min.js"></script>
 <script src="js/p5.min.js"></script>
 <script src="js/p5.dom.min.js"></script>
 <script src="js/p5.spacebrew.js"></script>  
@@ -28,27 +29,31 @@
 </head>
 <body class="w3-padding-24">
   <h1 class="w3-center w3-text-gray"> Elbow Room </h1>  
-  <div id="content" class="w3-content w3-section _w3-border w3-padding-16" style="max-width: 600px; ">
+  <div id="content" class="w3-content w3-section  w3-padding-16" style="max-width: 600px; ">
 <!--   <h1 class="w3-center w3-text-green"> Elbow Room </h1> -->
-  <h2 class="w3-center w3-text-green w3-margin-bottom"> Player 010 </h2>
+  <h2 id="playerId" class="w3-center w3-text-green w3-margin-bottom"> Player 010 </h2>
 <!--   <div class="w3-content w3-container _w3-cell w3-border" id="sketch" style="max-width: 800px;"> -->
-    <div id="ui" class="w3-content _w3-border w3-display-container w3-padding-16">
+    <div id="ui" class="w3-content  w3-display-container w3-padding-16">
       
-      <div class="btnContainer w3-third w3-green w3-cell w3-display-topmiddle w3-cell-middle _w3-border w3-button">
+      <!--           -->
+      <!-- up button -->      
+      <!--           -->
+
+      <div id="btnUp" class="btnContainer w3-third w3-green w3-cell w3-display-topmiddle w3-cell-middle _w3-border w3-button">
         <p class="w3-display-middle w3-xxlarge">up</p>
       </div>
       
-      <div class="btnContainer w3-third w3-green ue w3-cell w3-display-bottommiddle w3-cell-middle _w3-border w3-button">
+      <div id="btnDown" class="btnContainer w3-third w3-green ue w3-cell w3-display-bottommiddle w3-cell-middle _w3-border w3-button">
         <p class="w3-display-middle w3-xxlarge">down</p>
       </div>
 
       
-      <div class="btnContainer w3-third w3-green w3-cell w3-display-left w3-cell-middle _w3-border w3-button">
+      <div id="btnLeft" class="btnContainer w3-third w3-green w3-cell w3-display-left w3-cell-middle _w3-border w3-button">
         <p class="w3-display-middle w3-xxlarge">left</p>
       </div>
       
       
-      <div class="btnContainer w3-third w3-green w3-cell w3-display-right w3-cell-middle _w3-border w3-button">
+      <div id="btnRight" class="btnContainer w3-third w3-green w3-cell w3-display-right w3-cell-middle _w3-border w3-button">
         <p class="w3-display-middle w3-xxlarge">right</p>
       </div>
             
@@ -56,5 +61,75 @@
     </div>
   </div>
 <!--   </div> -->
+
+<script type="text/javascript">
+  let SB_SERVER = "127.0.0.1"
+      ,SB_PORT = 9000
+      ,SB_NAME = "Player 0"
+      ,SB_DESCR = SB_NAME + " player client"
+
+  let spacebrew = new Spacebrew()
+  
+  spacebrew.addPublish("player0","string","")
+  //spacebrew.addSubscribe("player0_moves","string","")
+  //spacebrew.onStringMessage( onStringMessage )
+  spacebrew.connect(SB_SERVER, SB_PORT, SB_NAME, SB_DESCR);
+</script>
+
+<script type="text/javascript">
+  
+
+    function setup() {
+      noCanvas();
+      noLoop();
+
+      initButtonHandlers();
+
+    }
+
+    let initButtonHandlers = () => {
+      btns = selectAll(".btnContainer")
+      _.each(btns, 
+             b => {
+              let id = b.id();
+              if( id == 'btnUp') { 
+                b.mousePressed(onDirectionButtonClick.bind(null,'up'));
+              }
+              if( id == 'btnDown') { 
+                b.mousePressed(onDirectionButtonClick.bind(null,'down'))
+              }
+              if( id == 'btnLeft') { 
+                b.mousePressed(onDirectionButtonClick.bind(null,'left'))
+              }
+              if( id == 'btnRight') { 
+                b.mousePressed(onDirectionButtonClick.bind(null,'right'))
+              }
+            });
+    }
+
+    let onDirectionButtonClick = 
+          (direction) => {
+            console.log('[onDirectionButtonClick]',direction)
+        }
+
+    function keyPressed(value) {
+      // console.log(keyCode);
+      if(keyCode === 37) { moveLeft() }
+      if(keyCode === 38) { moveUp() }
+      if(keyCode === 39) { moveRight() }
+      if(keyCode === 40) { moveDown() }
+    }
+
+    function keyTyped() {
+      if(key === 'w' || key === 'W') { moveUp() }
+      if(key === 'a' || key === 'A') { moveLeft() }
+      if(key === 's' || key === 'S') { moveDown() }        
+      if(key === 'd' || key === 'D') { moveRight() }
+    }
+
+
+</script>
 </body>
 </html>
+
+
