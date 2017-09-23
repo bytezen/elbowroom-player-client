@@ -91,6 +91,7 @@
 
   let initSpacebrew = () => {
     move = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);
+    jump = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE, "jump");
     spacebrew = new Spacebrew()
 
     //this should always work as a test
@@ -241,10 +242,11 @@
             
             if(currJumpCount > 0) {
               //send jump to the server
+              jump();
               currJumpCount--; 
               select("#jumpCount").html(currJumpCount) 
             } 
-            
+
             if(currJumpCount == 0) {
               select("#btnJump").addClass("w3-disabled")
             }
