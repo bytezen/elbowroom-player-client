@@ -7,6 +7,7 @@
 <script src="js/p5.dom.min.js"></script>
 <script src="js/p5.spacebrew.js"></script>  
 <link rel="stylesheet" type="text/css" href="css/w3.css">
+<link rel="stylesheet" type="text/css" href="css/bz.css">
 <style type="text/css">
     .dirbutton {
     width: 100px;
@@ -84,13 +85,61 @@
          ,UP     = 'up'
          ,DOWN   = 'down'
 
+    var colors = {}
+        ,defaultStyle = "w3-green"
+        ,defaultTextStyle = "w3-text-green"
+        ,textColorStyle = null
+        ,bgColorStyle = null
+
+    
+    function toBZColorStyle(str) {
+      return 'bz-' + str
+    }
+
+    function toBZHoverStyle(str) {
+      return 'bz-hover-' + str
+    }
+
+    function preload() {
+      colors = loadJSON('data/colors.json')
+
+
+
+    }
+
     function setup() {
       noCanvas();
       noLoop();
 
       initButtonHandlers();
-
+      initPlayerLook();
     }
+
+
+    let initPlayerLook = () => {
+      var playeridnum = 2,
+          _color = colors[playeridnum].name
+
+      console.log(colors,_color)
+      //once these are loaded then we can
+      //assign a style based on the player number
+      //get the color and then get css class strings
+      textColorStyle = ["bz","text",_color].join("-")
+      bgColorStyle = ["bz",_color].join("-")    
+
+      if(!_.isNil(textColorStyle) && !_.isNil(bgColorStyle)) {
+        _.each(selectAll(".btnContainer")
+              ,it => {
+                it.removeClass(defaultStyle)
+                it.addClass(bgColorStyle)
+              })
+
+        select("#playerId")
+            .removeClass(defaultTextStyle)
+            .addClass(textColorStyle)
+      }    
+    }
+
 
     let initButtonHandlers = () => {
       btns = selectAll(".btnContainer")
