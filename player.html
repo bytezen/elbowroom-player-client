@@ -70,6 +70,7 @@
       ,SB_CHANNEL = "player0"      //TODO: pass via queryParam
       ,SB_CHANNEL_TYPE = "string"
       ,SB_DESCRIPTION = SB_CHANNEL_NAME + " player client"
+      ,playerId = null
       ,channelId = "" 
       ,server = ""
       ,clientName = ""
@@ -139,8 +140,8 @@
 
 
     let initPlayerLook = () => {
-      var playeridnum = 2,
-          _color = colors[playeridnum].name
+      //var playeridnum = 2,
+      _color = colors[playerId].name
 
       //once these are loaded then we can
       //assign a style based on the player number
@@ -158,7 +159,9 @@
         select("#playerId")
             .removeClass(defaultTextStyle)
             .addClass(textColorStyle)
-      }    
+      } 
+
+      select("#playerId").html("Player " + playerId)   
     }
 
 
