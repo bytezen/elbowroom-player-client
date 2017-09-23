@@ -66,17 +66,32 @@
 <script type="text/javascript">
   let SB_SERVER = "127.0.0.1" //TODO: pass via queryParam
       ,SB_PORT = 9000
-      ,SB_NAME = "Player 0"   //TODO: pass via queryParam
-      ,SB_ID = "player0"      //TODO: pass via queryParam
+      ,SB_CHANNEL_NAME = "PLAYER 0"   //TODO: pass via queryParam
+      ,SB_CHANNEL = "player0"      //TODO: pass via queryParam
       ,SB_CHANNEL_TYPE = "string"
-      ,SB_DESCR = SB_NAME + " player client"
+      ,SB_DESCRIPTION = SB_CHANNEL_NAME + " player client"
+      ,channelId = "" 
+      ,server = ""
+      ,clientName = ""
+      ,clientDescription = ""
+      ,spacebrew = {}
 
-  let spacebrew = new Spacebrew()
+  let initSpacebrew = () => {
+    move = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);
+    spacebrew = new Spacebrew()
+    //this should always work as a test
+
+    //spacebrew.addPublish(channel,SB_CHANNEL_TYPE,"")
+    //spacebrew.connect(server, SB_PORT, clientName, clientDescription);
+
+    spacebrew.addPublish(channelId,SB_CHANNEL_TYPE,"")
+    spacebrew.connect(server, SB_PORT, clientName, clientDescription);    
+  }
   
-  spacebrew.addPublish(SB_ID,SB_CHANNEL_TYPE,"")
+  
   //spacebrew.addSubscribe("player0_moves","string","")
   //spacebrew.onStringMessage( onStringMessage )
-  spacebrew.connect(SB_SERVER, SB_PORT, SB_NAME, SB_DESCR);
+  // spacebrew.connect(SB_SERVER, SB_PORT, SB_NAME, SB_DESCRIPTION);
 </script>
 
 <script type="text/javascript">
@@ -90,21 +105,26 @@
         ,defaultTextStyle = "w3-text-green"
         ,textColorStyle = null
         ,bgColorStyle = null
+        ,params = {}
 
-    
-    function toBZColorStyle(str) {
-      return 'bz-' + str
-    }
-
-    function toBZHoverStyle(str) {
-      return 'bz-hover-' + str
-    }
-
+  
     function preload() {
       colors = loadJSON('data/colors.json')
+      params = getURLParams();
+      // console.log(getURLParams());
 
+      if(_.isNil(params)) {
+        console.error("Not parameters passed in\nverify that the url has the format: '?server=<ipaddr>&pid=<0-19>'")
+        return;
+      }
 
+      server = params.server;
+      channelId = "player"+params.pid 
+      clientName = "PLAYER " + params.pid 
+      playerId = params.pid
+      clientDescription = "PLAYER"+params.pid + " client "
 
+      console.log("config = ", server, channelId, clientName,clientDescription, playerId)
     }
 
     function setup() {
@@ -113,6 +133,8 @@
 
       initButtonHandlers();
       initPlayerLook();
+      initSpacebrew();
+      
     }
 
 
@@ -120,7 +142,6 @@
       var playeridnum = 2,
           _color = colors[playeridnum].name
 
-      console.log(colors,_color)
       //once these are loaded then we can
       //assign a style based on the player number
       //get the color and then get css class strings
@@ -161,13 +182,13 @@
             });
     }
 
-    let sendToServer = (channel,type,value) =>
+    let sendToServer = (id,type,value) =>
       {
-        console.log('[sendToServer]',channel,type,value);
-        spacebrew.send(channel,type,value);
+        console.log('[sendToServer]',id,type,value);
+        spacebrew.send(id,type,value);
       }
 
-    let move = sendToServer.bind(null,SB_ID,SB_CHANNEL_TYPE);
+    let move = null; //sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);
 
     let onDirectionButtonClick = 
           (direction) => {
