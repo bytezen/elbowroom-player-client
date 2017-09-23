@@ -86,13 +86,14 @@
   let initSpacebrew = () => {
     move = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);
     spacebrew = new Spacebrew()
+
     //this should always work as a test
 
     //spacebrew.addPublish(channel,SB_CHANNEL_TYPE,"")
     //spacebrew.connect(server, SB_PORT, clientName, clientDescription);
 
     spacebrew.addPublish(channelId,SB_CHANNEL_TYPE,"")
-    //spacebrew.connect(server, SB_PORT, clientName, clientDescription);    
+    spacebrew.connect(server, SB_PORT, clientName, clientDescription);    
   }
   
   
@@ -191,7 +192,12 @@
               }
             });
 
-      select("#btnActivate").mousePressed(onActivateButtonClick)
+      select("#btnActivate")
+        .mousePressed(onActivateButtonClick)      
+        // .mousePressed(()=>{
+        //   sendToServer(channelId,SB_CHANNEL_TYPE,"hello")
+        // })
+      
     }
 
     let sendToServer = (id,type,value) =>
@@ -244,9 +250,10 @@
               b.removeClass('w3-hide')
             });               
         
-        if(!spacebrew.connected()) { 
-           spacebrew.connect(server, SB_PORT, clientName, clientDescription);
-        }             
+        sendToServer(channelId,SB_CHANNEL_TYPE,"hello")
+        // if(!spacebrew.connected()) { 
+        //    spacebrew.connect(server, SB_PORT, clientName, clientDescription);
+        // }                     
       }
       else if(state === STATE_NOT_ACTIVATED) {
         //disable the ui
@@ -257,9 +264,10 @@
               b.addClass('w3-hide')
             });
 
-        if(spacebrew.connected()) { 
-          spacebrew.close() 
-        }                        
+        sendToServer(channelId,SB_CHANNEL_TYPE,"goodbye")
+        // if(spacebrew.connected()) { 
+        //   spacebrew.close() 
+        // }                        
       }
     }
 
