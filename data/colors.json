@@ -4,24 +4,24 @@
 		"rgb": [176, 23, 31]
 	},
 	{
-		"name": "crimson",
-		"hex": "#DC143C",
-		"rgb": [220, 20, 60]
-	},
+		"name": "darkviolet",
+		"hex": "#9400D3",
+		"rgb": [148, 0, 211]
+	},	
 	{
-		"name": "maroon",
-		"hex": "#800000",
-		"rgb": [128, 0, 0]
-	},
-	{
-		"name": "raspberry",
-		"hex": "#872657",
-		"rgb": [135, 38, 87]
-	},
+		"name": "gold",
+		"hex": "#FFD700",
+		"rgb": [255, 215, 0]
+	},	
 	{
 		"name": "deeppink",
 		"hex": "#FF1493",
 		"rgb": [255, 20, 147]
+	},	
+	{
+		"name": "raspberry",
+		"hex": "#872657",
+		"rgb": [135, 38, 87]
 	},
 	{
 		"name": "orchid",
@@ -29,9 +29,9 @@
 		"rgb": [218, 112, 214]
 	},
 	{
-		"name": "darkviolet",
-		"hex": "#9400D3",
-		"rgb": [148, 0, 211]
+		"name": "crimson",
+		"hex": "#DC143C",
+		"rgb": [220, 20, 60]
 	},
 	{
 		"name": "purple",
@@ -59,40 +59,40 @@
 		"rgb": [51, 161, 201]
 	},
 	{
-		"name": "darkturquoise",
-		"hex": "#00CED1",
-		"rgb": [0, 206, 209]
+		"name": "turquoiseblue",
+		"hex": "#00C78C",
+		"rgb": [0, 199, 140]
 	},
 	{
-		"name": "lightblue",
-		"hex": "#7D9EC0",
-		"rgb": [125, 158, 192]
-	},
+		"name": "darkolivegreen",
+		"hex": "#A2CD5A",
+		"rgb": [162, 205, 90]
+	},	
 	{
 		"name": "slateblue",
 		"hex": "#7171C6",
 		"rgb": [113, 113, 198]
 	},
 	{
-		"name": "lightseagreen",
-		"hex": "#20B2AA",
-		"rgb": [32, 178, 170]
-	},
-	{
-		"name": "turquoiseblue",
-		"hex": "#00C78C",
-		"rgb": [0, 199, 140]
-	},
-	{
 		"name": "mediumseagreen",
 		"hex": "#3CB371",
 		"rgb": [60, 179, 113]
+	},	
+	{
+		"name": "darkturquoise",
+		"hex": "#00CED1",
+		"rgb": [0, 206, 209]
+	},	
+	{
+		"name": "darkgoldenrod",
+		"hex": "#B8860B",
+		"rgb": [184, 134, 11]
 	},
 	{
-		"name": "darkolivegreen",
-		"hex": "#A2CD5A",
-		"rgb": [162, 205, 90]
-	},
+		"name": "lightblue",
+		"hex": "#7D9EC0",
+		"rgb": [125, 158, 192]
+	},	
 	{
 		"name": "chartreuse",
 		"hex": "#71C671",
@@ -114,16 +114,6 @@
 		"rgb": [197, 193, 170]
 	},
 	{
-		"name": "gold",
-		"hex": "#FFD700",
-		"rgb": [255, 215, 0]
-	},
-	{
-		"name": "darkgoldenrod",
-		"hex": "#B8860B",
-		"rgb": [184, 134, 11]
-	},
-	{
 		"name": "darkorange",
 		"hex": "#FF7F00",
 		"rgb": [255, 127, 0]
@@ -137,5 +127,15 @@
 		"name": "gray",
 		"hex": "#282828",
 		"rgb": [40, 40, 40]
-	}
+	},
+	{
+		"name": "lightseagreen",
+		"hex": "#20B2AA",
+		"rgb": [32, 178, 170]
+	},	
+	{
+		"name": "maroon",
+		"hex": "#800000",
+		"rgb": [128, 0, 0]
+	},	
 ]
