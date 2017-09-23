@@ -47,10 +47,14 @@
         <p class="w3-display-middle w3-xxlarge">up</p>
       </div>
       
-      <div id="btnDown" class="btnContainer w3-third w3-green ue w3-cell w3-display-bottommiddle w3-cell-middle _w3-border w3-button w3-hide">
+      <div id="btnDown" class="btnContainer w3-third w3-green w3-cell w3-display-bottommiddle w3-cell-middle _w3-border w3-button w3-hide">
         <p class="w3-display-middle w3-xxlarge">down</p>
       </div>
 
+      <div id="btnJump" class="btnContainer w3-third w3-green w3-cell w3-display-middle w3-cell-middle _w3-border w3-button w3-circle w3-hide">
+        <p class="w3-display-middle w3-xxlarge">jump</p>
+        <span id="jumpCount" class="w3-badge w3-large w3-red">3</span>
+      </div>
       
       <div id="btnLeft" class="btnContainer w3-third w3-green w3-cell w3-display-left w3-cell-middle _w3-border w3-button w3-hide">
         <p class="w3-display-middle w3-xxlarge">left</p>
@@ -79,6 +83,8 @@
       ,clientName = ""
       ,clientDescription = ""
       ,spacebrew = {}
+      ,jumpCount = 5
+      ,currJumpCount = jumpCount
 
   const STATE_ACTIVATED = "stateActivated"
         ,STATE_NOT_ACTIVATED = "stateNotActivated"
@@ -169,7 +175,9 @@
             .addClass(textColorStyle)
       } 
 
-      select("#playerId").html("Player " + playerId)   
+      select("#playerId").html("Player " + playerId)  
+
+      select("#jumpCount").html(jumpCount) 
     }
 
 
@@ -190,6 +198,9 @@
               if( id == 'btnRight') { 
                 b.mousePressed(onDirectionButtonClick.bind(null,'right'))
               }
+              if( id == 'btnJump') { 
+                b.mousePressed(onJumpButtonClick)
+              }              
             });
 
       select("#btnActivate")
@@ -222,6 +233,22 @@
           () => {
             console.log('[onActivateButtonClick] should send activate message to the server and turn on the buttons')
             changeState(STATE_ACTIVATED)
+          }
+        , onJumpButtonClick =
+          () => {
+            console.log('[onJumpButtonClick] ')
+            //decrease the jump count
+            
+            if(currJumpCount > 0) {
+              //send jump to the server
+              currJumpCount--; 
+              select("#jumpCount").html(currJumpCount) 
+            } 
+            
+            if(currJumpCount == 0) {
+              select("#btnJump").addClass("w3-disabled")
+            }
+            //if jumps are 0 then disable the button            
           }
 
     function keyPressed(value) {
