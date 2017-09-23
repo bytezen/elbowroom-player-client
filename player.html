@@ -29,6 +29,9 @@
 </style>
 </head>
 <body class="w3-padding-24">
+  <div id="btnActivate" class="w3-display-topleft w3-green w3-cell w3-cell-middle _w3-border w3-button">
+    <p>gimme some <br> elbow room !!</p>
+  </div>
   <h1 class="w3-center w3-text-gray"> Elbow Room </h1>  
   <div id="content" class="w3-content w3-section  w3-padding-16" style="max-width: 600px; ">
 <!--   <h1 class="w3-center w3-text-green"> Elbow Room </h1> -->
@@ -40,21 +43,21 @@
       <!-- up button -->      
       <!--           -->
 
-      <div id="btnUp" class="btnContainer w3-third w3-green w3-cell w3-display-topmiddle w3-cell-middle _w3-border w3-button">
+      <div id="btnUp" class="btnContainer w3-third w3-green w3-cell w3-display-topmiddle w3-cell-middle _w3-border w3-button w3-hide">
         <p class="w3-display-middle w3-xxlarge">up</p>
       </div>
       
-      <div id="btnDown" class="btnContainer w3-third w3-green ue w3-cell w3-display-bottommiddle w3-cell-middle _w3-border w3-button">
+      <div id="btnDown" class="btnContainer w3-third w3-green ue w3-cell w3-display-bottommiddle w3-cell-middle _w3-border w3-button w3-hide">
         <p class="w3-display-middle w3-xxlarge">down</p>
       </div>
 
       
-      <div id="btnLeft" class="btnContainer w3-third w3-green w3-cell w3-display-left w3-cell-middle _w3-border w3-button">
+      <div id="btnLeft" class="btnContainer w3-third w3-green w3-cell w3-display-left w3-cell-middle _w3-border w3-button w3-hide">
         <p class="w3-display-middle w3-xxlarge">left</p>
       </div>
       
       
-      <div id="btnRight" class="btnContainer w3-third w3-green w3-cell w3-display-right w3-cell-middle _w3-border w3-button">
+      <div id="btnRight" class="btnContainer w3-third w3-green w3-cell w3-display-right w3-cell-middle _w3-border w3-button w3-hide">
         <p class="w3-display-middle w3-xxlarge">right</p>
       </div>
             
@@ -77,6 +80,9 @@
       ,clientDescription = ""
       ,spacebrew = {}
 
+  const STATE_ACTIVATED = "stateActivated"
+        ,STATE_NOT_ACTIVATED = "stateNotActivated"
+
   let initSpacebrew = () => {
     move = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);
     spacebrew = new Spacebrew()
@@ -86,7 +92,7 @@
     //spacebrew.connect(server, SB_PORT, clientName, clientDescription);
 
     spacebrew.addPublish(channelId,SB_CHANNEL_TYPE,"")
-    spacebrew.connect(server, SB_PORT, clientName, clientDescription);    
+    //spacebrew.connect(server, SB_PORT, clientName, clientDescription);    
   }
   
   
@@ -126,6 +132,7 @@
       clientDescription = "PLAYER"+params.pid + " client "
 
       console.log("config = ", server, channelId, clientName,clientDescription, playerId)
+
     }
 
     function setup() {
@@ -183,6 +190,8 @@
                 b.mousePressed(onDirectionButtonClick.bind(null,'right'))
               }
             });
+
+      select("#btnActivate").mousePressed(onActivateButtonClick)
     }
 
     let sendToServer = (id,type,value) =>
@@ -203,6 +212,11 @@
             move(direction);
           }                                  
         }
+        , onActivateButtonClick =
+          () => {
+            console.log('[onActivateButtonClick] should send activate message to the server and turn on the buttons')
+            changeState(STATE_ACTIVATED)
+          }
 
     function keyPressed(value) {
       // console.log(keyCode);
@@ -220,6 +234,34 @@
       if(key === 'd' || key === 'D') { move(RIGHT) }
     }
 
+    function changeState(state) {
+      if(state === STATE_ACTIVATED) {
+        //disable the i want to play button
+        //activate the ui
+        select('#btnActivate').addClass("w3-hide")
+        _.each(selectAll('.btnContainer'), 
+             b => { 
+              b.removeClass('w3-hide')
+            });               
+        
+        if(!spacebrew.connected()) { 
+           spacebrew.connect(server, SB_PORT, clientName, clientDescription);
+        }             
+      }
+      else if(state === STATE_NOT_ACTIVATED) {
+        //disable the ui
+        //activate the i wanna play button
+        select('#btnActivate').removeClass("w3-hide")
+        _.each(selectAll('.btnContainer'), 
+             b => { 
+              b.addClass('w3-hide')
+            });
+
+        if(spacebrew.connected()) { 
+          spacebrew.close() 
+        }                        
+      }
+    }
 
 </script>
 </body>
