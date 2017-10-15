@@ -16,6 +16,8 @@
   const STATE_ACTIVATED = "stateActivated"
         ,STATE_NOT_ACTIVATED = "stateNotActivated"
 
+  var move = null; 
+
   let initSpacebrew = () => {
     console.log('[initSpacebrew] spacebrew = ' + spacebrew)
     move = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);

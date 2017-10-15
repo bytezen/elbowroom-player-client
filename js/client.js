@@ -74,23 +74,24 @@
 
 
     var initButtonHandlers = () => {
-      btns = selectAll(".btnContainer")
+      btns = selectAll(".w3-button")
       _.each(btns, 
              b => {
               let id = b.id();
-              if( id == 'btnUp') { 
+
+              if( id.indexOf('btnUp') > -1 ) { 
                 b.mousePressed(onDirectionButtonClick.bind(null,'up'));
               }
-              if( id == 'btnDown') { 
+              if( id.indexOf('btnDown') > -1 ) { 
                 b.mousePressed(onDirectionButtonClick.bind(null,'down'))
               }
-              if( id == 'btnLeft') { 
+              if( id.indexOf('btnLeft') > -1 ) { 
                 b.mousePressed(onDirectionButtonClick.bind(null,'left'))
               }
-              if( id == 'btnRight') { 
+              if( id.indexOf('btnRight') > -1 ) { 
                 b.mousePressed(onDirectionButtonClick.bind(null,'right'))
               }
-              if( id == 'btnJump') { 
+              if( id.indexOf('btnJump') > -1 ) { 
                 b.mousePressed(onJumpButtonClick)
               }              
             });
@@ -109,7 +110,6 @@
         spacebrew.send(id,type,value);
       }
 //nothing
-    var move = null; //sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);
 
     var onDirectionButtonClick = 
           (direction) => {
@@ -145,19 +145,24 @@
           }
 
     function keyPressed(value) {
-      // console.log(keyCode);
+       // console.log("keyPressed",keyCode);
 
       if(keyCode === 37) { move(LEFT) }
       if(keyCode === 38) { move(UP) }
       if(keyCode === 39) { move(RIGHT) }
       if(keyCode === 40) { move(DOWN) }
+      // if(keyCode === 32) { jump() }
     }
 
     function keyTyped() {
+       // console.log("keytyped...",keyCode, key);
       if(key === 'w' || key === 'W') { move(UP) }
       if(key === 'a' || key === 'A') { move(LEFT) }
       if(key === 's' || key === 'S') { move(DOWN) }        
       if(key === 'd' || key === 'D') { move(RIGHT) }
+      if(key === ' ' || key === 'j' || key === 'J') { 
+        onJumpButtonClick() 
+      }
     }
 
     function changeState(state) {
