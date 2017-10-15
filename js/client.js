@@ -4,8 +4,9 @@
          ,DOWN   = 'down'
 
     var colors = {}
-        ,defaultStyle = "w3-green"
-        ,defaultTextStyle = "w3-text-green"
+        ,defaultStyle = "w3-black"
+        ,defaultColor = "w3-dark-gray"
+        ,defaultTextStyle = "w3-text-white"
         ,textColorStyle = null
         ,bgColorStyle = null
         ,params = {}
@@ -44,8 +45,33 @@
       
     }
 
-
     var initPlayerLook = () => {
+
+      btns = selectAll(".w3-button")
+      _.each(btns, 
+             b => {
+              // let id = b.id();
+              elemSetStyle(b,defaultColor)
+              /*
+              if( id.indexOf('btnUp') > -1 ) { 
+                elemSetStyle(b,defaultColor)
+              }
+              if( id.indexOf('btnDown') > -1 ) { 
+                b.mousePressed(onDirectionButtonClick.bind(null,'down'))
+              }
+              if( id.indexOf('btnLeft') > -1 ) { 
+                b.mousePressed(onDirectionButtonClick.bind(null,'left'))
+              }
+              if( id.indexOf('btnRight') > -1 ) { 
+                b.mousePressed(onDirectionButtonClick.bind(null,'right'))
+              }
+              if( id.indexOf('btnJump') > -1 ) { 
+                b.mousePressed(onJumpButtonClick)
+              }
+              */              
+            });
+      // elemSetStyle("#")
+      /*
       //var playeridnum = 2,
       _color = colors[playerId].name
 
@@ -62,14 +88,15 @@
                 it.addClass(bgColorStyle)
               })
 
-        select("#playerId")
+        select("#playerLabel")
             .removeClass(defaultTextStyle)
             .addClass(textColorStyle)
       } 
 
-      select("#playerId").html("Player " + playerId)  
+      select("#playerLabel").html("Player " + playerId)  
 
       select("#jumpCount").html(jumpCount) 
+      */
     }
 
 
@@ -109,23 +136,28 @@
         console.log('[sendToServer]',id,type,value);
         spacebrew.send(id,type,value);
       }
-//nothing
 
+
+      /* --------------- */
+      /* button handlers */
+      /* --------------- */
+    
     var onDirectionButtonClick = 
           (direction) => {
             console.log('[onDirectionButtonClick]',direction)
-          if( direction === LEFT  || 
-              direction === UP    ||   
-              direction === RIGHT || 
-              direction === DOWN ) {
-            move(direction);
+          if( direction === LEFT  || direction === UP    ||   
+              direction === RIGHT || direction === DOWN ) {
+            
+              move(direction);
           }                                  
         }
+
         , onActivateButtonClick =
           () => {
             console.log('[onActivateButtonClick] should send activate message to the server and turn on the buttons')
             changeState(STATE_ACTIVATED)
           }
+
         , onJumpButtonClick =
           () => {
             console.log('[onJumpButtonClick] ')
@@ -144,18 +176,19 @@
             //if jumps are 0 then disable the button            
           }
 
+      /* --------------- */
+      /* player controls */
+      /* --------------- */
+
     function keyPressed(value) {
-       // console.log("keyPressed",keyCode);
 
       if(keyCode === 37) { move(LEFT) }
       if(keyCode === 38) { move(UP) }
       if(keyCode === 39) { move(RIGHT) }
       if(keyCode === 40) { move(DOWN) }
-      // if(keyCode === 32) { jump() }
     }
 
     function keyTyped() {
-       // console.log("keytyped...",keyCode, key);
       if(key === 'w' || key === 'W') { move(UP) }
       if(key === 'a' || key === 'A') { move(LEFT) }
       if(key === 's' || key === 'S') { move(DOWN) }        
@@ -164,6 +197,10 @@
         onJumpButtonClick() 
       }
     }
+
+      /* --------------- */
+      /* state machine   */
+      /* --------------- */
 
     function changeState(state) {
       if(state === STATE_ACTIVATED) {
@@ -195,4 +232,36 @@
         // }                        
       }
     }
+
+
+      /* --------------- */
+      /* view commands   */
+      /* --------------- */
+
+      function elemSetText(selector,val) {
+        if(_.isString(selector)) {
+          select(selector).html(val)
+        } else if( _.hasIn(selector,"html") ) {
+          selector.html(val)
+        }
+      }
+
+      function elemReplaceStyle(selector,oStyle,nStyle) {
+        if(_.isString(selector)) {
+          select(selector).removeClass(oStyle).addClass(nStyle)
+        } else if( _.hasIn(selector, "removeClass") ) {
+          selector.removeClass(oStyle).addClass(nStyle)
+        }
+      }
+
+      function elemSetStyle(selector,style) {
+
+        if(_.isString(selector)) {
+          select(selector).addClass(style)
+        } else if( _.hasIn(selector, "addClass") ) {
+          selector.addClass(style)
+        }
+      }
+
+
 
