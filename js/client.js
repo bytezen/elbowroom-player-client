@@ -9,26 +9,49 @@
         ,defaultTextStyle = "w3-text-white"
         ,textColorStyle = null
         ,bgColorStyle = null
-        ,params = {}
+        // ,params = {}
+        ,configuration = null
+        ,playerPath = null
+        ,connection = {}
 
   
     function preload() {
       colors = loadJSON('data/colors.json')
-      params = getURLParams();
-      // console.log(getURLParams());
+      configuration = loadJSON('config.json')
+      // params = getURLParams();
 
-      if(_.isNil(params)) {
-        console.error("No parameters passed in\nverify that the url has the format: '?server=<ipaddr>&pid=<0-19>'")
+    }
+
+
+    function initializeConnection() {
+
+      // if(_.isNil(params)) {
+      //   console.error("No parameters passed in\nverify that the url has the format: '?server=<ipaddr>&pid=<0-19>'")
+      //   return;
+      // }
+
+      if(_.isNil(configuration) || !_.has(configuration,"server")) {
+        console.error("No configuration. Check the server")
         return;
       }
 
-      server = params.server;
-      channelId = "player"+params.pid 
-      clientName = "PLAYER " + params.pid 
-      playerId = params.pid
-      clientDescription = "PLAYER"+params.pid + " client "
+      //get the player from the URLPath
 
-      console.log("config = ", server, channelId, clientName,clientDescription, playerId)
+      if( (playerPath = getURLPath()[0].match(/player(\d+)\.html/)) != null ) {
+         playerId = playerPath[1]
+      } else {
+        console.log('[preload] ERROR no player id was read; check that the url is correct. http://server/player#.html')
+      }
+
+      connection.server = configuration.server; //params.server;
+      connection.channelId = "player"+playerId //params.pid 
+      connection.clientName = "PLAYER " + playerId //params.pid 
+      // playerId = params.pid
+      // clientDescription = "PLAYER"+params.pid + " client "
+      connection.clientDescription = "PLAYER "+ playerId + " client "
+      connection.port = "9000";
+      console.log("[preload] connection: ",connection);//config = ", server, channelId, clientName,clientDescription, playerId)
+
 
     }
 
@@ -36,7 +59,26 @@
       console.log('[setup]')
       initButtonHandlers();
       initPlayerLook();
-      initSpacebrew();
+      // initSpacebrew();
+      initializeConnection();
+
+
+    console.log('[initSpacebrew] spacebrew = ' + spacebrew)
+    move = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE);
+    jump = sendToServer.bind(null,channelId,SB_CHANNEL_TYPE, "jump");
+    spacebrew = new Spacebrew()
+
+    //this should always work as a test
+
+    //spacebrew.addPublish(channel,SB_CHANNEL_TYPE,"")
+    //spacebrew.connect(server, SB_PORT, clientName, clientDescription);
+
+spacebrew.addPublish(connection.channelId, "string", "")
+spacebrew.connect(connection.server, connection.port, connection.clientName, connection.clientDescription)
+    // spacebrew.addPublish(channelId,SB_CHANNEL_TYPE,"")
+    // spacebrew.connect(server, SB_PORT, clientName, clientDescription);  
+
+
 
       noCanvas();
       noLoop();
